@@ -1,48 +1,32 @@
 window.onload = function(){
     
-    function handle(jqXHR, testStatus, error){
-        console.log(error);
+    function get(url){
+        return new Promise(function(resolve, reject){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onload = function(){
+                if (xhttp.status == 200){
+                    resolve(JSON.parse(xhttp.response));
+                } else{
+                    reject(xhttp.statusText);
+                }
+            };
+            xhttp.onerror = function(){
+                reject(xhttp.statusText);
+            };
+            xhttp.send();
+        });
+        
     }
-    
-    $.ajax({
-        type: "GET",
-        url: "data/tweets.json",
-        success: cdTweets,
-        error: handleError
-    });
-    
-    function cbTweets(data){
-        console.log(data);
-
-            
-        $.ajax({
-        type: "GET",
-        url: "data/friends.json",
-        success: cbFriends,
-        error: handleError
-    });
-     
-     function cbFriends(data){
-        console.log(data);
-  }
-           
-        $.ajax({
-        type: "GET",
-        url: "data/videos.json",
-        success: cbVideos,
-        error: handleError
-    });
-     
-     function cbVideo(data){
-        console.log(data);
- }
-        },
-        error: handleError
-        }
-    });
-        },
-        error: handleError
-        }
-        error: handleError
+    var promise = get("Ajax/tweets.json");
+    promise.then(function(tweets){
+        console.log(tweets);
+        return get("data/friends.json")
+    }).then(function(friends){
+        console.log(friends);
+        return get("data/videos.json")
+    }).then(function(videos){
+        console.log(videos);
+    }).catch(function(error){
+        console.log(error)
     });
 };
