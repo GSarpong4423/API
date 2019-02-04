@@ -1,32 +1,48 @@
 window.onload = function(){
     
-    var http = new xmlHttpRequest();
+    function handle(jqXHR, testStatus, error){
+        console.log(error);
+    }
     
-    http.onreadystatechange = function(){
-        if(http.readyState == 4 && http.status == 200){
-            console.log(JSON.parse(http.response));
-            
-        }
-        console.log(http);
-    };
-    
-    http.open("GET", "Ajax/tweets.json", true);
-    http.send();
-    
-    
-    // jquery method - same as above
-    $.get("Ajax/tweets.json", function(data){
-        console.log(data);
+    $.ajax({
+        type: "GET",
+        url: "data/tweets.json",
+        success: cdTweets,
+        error: handleError
     });
-    console.log("test");
     
+    function cbTweets(data){
+        console.log(data);
+
+            
+        $.ajax({
+        type: "GET",
+        url: "data/friends.json",
+        success: cbFriends,
+        error: handleError
+    });
+     
+     function cbFriends(data){
+        console.log(data);
+  }
+           
+        $.ajax({
+        type: "GET",
+        url: "data/videos.json",
+        success: cbVideos,
+        error: handleError
+    });
+     
+     function cbVideo(data){
+        console.log(data);
+ }
+        },
+        error: handleError
+        }
+    });
+        },
+        error: handleError
+        }
+        error: handleError
+    });
 };
-/* READY STATES
-
-0 - request not installed 
-1 - request has been set up
-2 - request has been set up
-3 - request is in process
-4 - request is complete
-
-*/
